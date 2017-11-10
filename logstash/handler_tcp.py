@@ -1,5 +1,6 @@
 from logging.handlers import DatagramHandler, SocketHandler
 from logstash import formatter
+from logstash.handler import BaseLogstashHandler, split_string
 
 
 # Derive from object to force a new-style class and thus allow super() to work
@@ -14,12 +15,16 @@ class TCPLogstashHandler(SocketHandler, object):
     :param tags: list of tags for a logger (default is None).
     """
 
-    def __init__(self, host, port=5959, message_type='logstash', tags=None, fqdn=False, version=0):
-        super(TCPLogstashHandler, self).__init__(host, port)
-        if version == 1:
-            self.formatter = formatter.LogstashFormatterVersion1(message_type, tags, fqdn)
-        else:
-            self.formatter = formatter.LogstashFormatterVersion0(message_type, tags, fqdn)
+    def __init__(self, host, port=5959, message_type='logstash', tags=None,
+                 fqdn=False, version=0, *args, **kwargs):
+        super(TCPLogstashHandler, self).__init__(host, port, *args, **kwargs)
 
-    def makePickle(self, record):
+        if version == 1:
+            self.formatter = formatter.LogstashFormatterVersion1(
+                message_type, tags, fqdn)
+        else:
+            self.formatter = formatter.LogstashFormatterVersion0(
+                message_type, tags, fqdn)
+
+    def makeChunkedPickle(self, record):
         return self.formatter.format(record) + b'\n'

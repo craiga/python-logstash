@@ -9,9 +9,10 @@ from logging.handlers import SocketHandler
 
 import pika
 from logstash import formatter
+from logstash.handler import BaseLogstashHandler
 
 
-class AMQPLogstashHandler(SocketHandler, object):
+class AMQPLogstashHandler(BaseLogstashHandler):
     """AMQP Log Format handler
 
     :param host: AMQP host (default 'localhost')
@@ -47,7 +48,8 @@ class AMQPLogstashHandler(SocketHandler, object):
                  password='guest', exchange='logstash', exchange_type='fanout',
                  virtual_host='/', message_type='logstash', tags=None,
                  durable=False, passive=False, version=0, extra_fields=True,
-                 fqdn=False, facility=None, exchange_routing_key=''):
+                 fqdn=False, facility=None, exchange_routing_key='', *args,
+                 **kwargs):
 
 
         # AMQP parameters
@@ -62,7 +64,7 @@ class AMQPLogstashHandler(SocketHandler, object):
         self.virtual_host = virtual_host
         self.routing_key = exchange_routing_key
 
-        SocketHandler.__init__(self, host, port)
+        SocketHandler.__init__(self, host, port, *args, **kwargs)
 
         # Extract Logstash paramaters
         self.tags = tags or []

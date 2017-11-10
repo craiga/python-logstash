@@ -13,7 +13,7 @@ class UDPLogstashHandler(TCPLogstashHandler, DatagramHandler):
     :param tags: list of tags for a logger (default is None).
     """
 
-    def makePickle(self, record):
+    def makeChunkedPickle(self, record):
         return self.formatter.format(record)
 
 
