@@ -1,9 +1,7 @@
-from logging.handlers import DatagramHandler, SocketHandler
-from logstash.handler_tcp import TCPLogstashHandler
-from logstash import formatter
+from logstash.handlers import BaseLogstashHandler
 
 
-class UDPLogstashHandler(TCPLogstashHandler, DatagramHandler):
+class UDPLogstashHandler(BaseLogstashHandler):
     """Python logging handler for Logstash. Sends events over UDP.
     :param host: The host of the logstash server.
     :param port: The port of the logstash server (default 5959).

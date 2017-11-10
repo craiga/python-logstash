@@ -63,7 +63,7 @@ class BaseLogstashHandler(SocketHandler, object):
 
     def __init__(self, host, port, max_message_size=math.inf):
         self.max_message_size = max_message_size
-        super(TCPLogstashHandler, self).__init__(host, port)
+        super(BaseLogstashHandler, self).__init__(host, port)
 
     def makePickle(self, record):
         """Pickle the record in chunks."""
@@ -72,7 +72,7 @@ class BaseLogstashHandler(SocketHandler, object):
             yield self.makeChunkedPickle(record)
 
     def makeChunkedPickle(self, record):
-        return super().makePickle(record)
+        return super(BaseLogstashHandler, self).makePickle(record)
 
     def send(self, strings):
         """Send pickled chunks."""

@@ -3,9 +3,7 @@ from logstash import formatter
 from logstash.handler import BaseLogstashHandler, split_string
 
 
-# Derive from object to force a new-style class and thus allow super() to work
-# on Python 2.6
-class TCPLogstashHandler(SocketHandler, object):
+class TCPLogstashHandler(BaseLogstashHandler):
     """Python logging handler for Logstash. Sends events over TCP.
     :param host: The host of the logstash server.
     :param port: The port of the logstash server (default 5959).
